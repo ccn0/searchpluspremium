@@ -6,7 +6,7 @@ You can add any search engine and even websites that aren't search engines! You 
 
 Despite technological advancements over the past few decades, some modern browsers and most mobile browsers have yet to catch up, and its just embarrassing.
 
-You can begin [searching NOW](https://ccn0.net/things/searchpluspremium), and you can also [read docs and lore on the CCN0 Wiki](https://ccn0.net/info/things/searchpluspremium).
+You can begin [searching NOW](https://ccn0.net/things/searchpluspremium), and you can also [read docs and lore on the CCN0 Wiki](https://ccn0.net/info/things/spp).
 
 ## License
 
