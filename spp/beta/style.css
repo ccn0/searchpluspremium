@@ -1,4 +1,11 @@
-:root {
+/*
+
+    SearchPlusPREMIUM | made by ccn0 | v1.6.18D03
+    https://ccn0.net/searchpluspremium/ | https://bsky.app/profile/ccn0.net
+
+*/
+
+[data-theme="default"] {
     --hero: #008000;
     --dark: #003200;
     --muted: #034e03;
@@ -9,6 +16,8 @@
     --btnhover: #e2ffbe;
     --btnactive: #102e10;
     --input: #f3f3f3;
+    --inputcolor: #000;
+    --inputfocus: #fff;
     --red: #ff1100;
     --green: #0dff00;
     --blue: #0015ff;
@@ -95,6 +104,10 @@ figure {
     margin:32px;
 }
 
+input {
+    color: var(--inputcolor);
+}
+
 form {
     display: flex;
     gap: 8px;
@@ -118,7 +131,7 @@ form {
                 padding-left: 32px;
                 transform: translateY(-2px);
                 flex: 3;
-                background-color: #fff;
+                background-color: var(--inputfocus);
             }
         }
         &[type="submit"] {
@@ -246,7 +259,7 @@ button {
 .ELcontainer {
     display: flex;
     border: 1px solid var(--hero);
-    height: 64px;
+    height: 96px;
     &:not(:last-child) {
         margin-bottom: 4px;
     }
@@ -270,9 +283,17 @@ button {
     border: 1px solid var(--hero);
 	flex: 4;
     input {
+        transition: all 0.2s;
         font-family: var(--font);
         flex: 1;
         border-radius: 0;
+        background-color: var(--input);
+        &:hover,&:focus-within {
+            border-color: #444;
+        }
+        &:focus-within {
+            background-color: var(--inputfocus);
+        }
     }
 }
 
@@ -297,6 +318,10 @@ button {
 
 }
 
+#enginelist {
+    padding: 4px;
+}
+
 .readme {
     padding: 4px 16px;
 }
@@ -305,4 +330,29 @@ iframe {
     flex: 1;
     width: 100%;
     height: 100%;
+}
+
+[data-theme="sppdark"] {
+    --input: #000;
+    --inputfocus: #333;
+    --inputcolor: #fff;
+	--hero: #008000;
+	--dark: #000;
+	--muted: #011701;
+	--superdark: #001400;
+	--alt: #0b3905;
+	--btn: #134400;
+	--btnhover: #59a200;
+	--btnactive: #102e10;
+    --btncolor: #fff;
+    --red: #ff1100;
+    --green: #0dff00;
+    --blue: #0015ff;
+    --magenta: #ff56e8;
+    --yellow: #ffd000;
+    --cyan: #23deff;
+    --brdrrds: 12px;
+    --engContHeight: 80px;
+    --textcolor:#fff;
+    --font: Arial, sans-serif;
 }
