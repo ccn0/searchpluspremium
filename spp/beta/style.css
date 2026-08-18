@@ -18,13 +18,14 @@
     --brdrrds: 12px;
     --engContHeight: 80px;
     --textcolor:#fff;
+    --font: Arial, sans-serif;
 }
 html {
     scrollbar-color:  var(--alt) var(--dark);
 }
 body {
     margin: 0;
-    font-family: Arial, sans-serif;
+    font-family: var(--font);
     background: var(--dark);
     color: var(--textcolor);
 }
@@ -33,7 +34,7 @@ body {
     box-sizing: border-box;
 }
 
-a {
+a,.topnav>button {
     color: var(--cyan);
     &:hover,&:focus-within {
         color: var(--yellow);
@@ -43,17 +44,25 @@ a {
     }
 }
 
+.topnav>button {
+    background: none!important;
+    transition: none;
+    border: none!important;
+    font-size: 100%;
+    font-family: var(--font);
+}
+
 .topnav {
     text-align: center;
     padding: 8px;
-    a {
+    a,button {
         cursor: pointer;
-        padding: 2px;
+        padding: 4px;
     }
 }
 
-.menu {
-    display: none;
+.hidden {
+    display: none!important;
 }
 
 .activemenu {
@@ -70,10 +79,16 @@ a {
     display: flex;
     flex-direction: column;
     flex: 1;
-    min-height: 100vh;
+    height: 100vh;
     flex-wrap: wrap;
     width: 100%;
     transition: background-color 0.1s;
+    overflow: hidden;
+}
+
+.readme {
+    overflow-y: auto;
+    height: auto;
 }
 
 figure {
@@ -131,27 +146,76 @@ form {
     justify-content: center;
 }
 
-@media (max-width: 500px) {
-    .hc {
-        align-content: center;
-    };
-    .content {
-        flex-direction: column;
-    }
-}
-
 .hc {
     padding: 16px;
-    max-width: 500px;
-    display: block;
+    display: flex;
+    align-content: center;
+    flex: 1;
     img {
         width: 100%;
     }
 }
 
+.hcdiv {
+    max-width: 500px;
+}
+
 .ac {
     display: flex;
+    flex: 1;
+    background-color: var(--alt);
+    min-height: 100vh;
+    flex-direction: column;
+}
+
+.appcontainer {
+    display: flex;
+	background: var(--muted);
+    padding: 8px;
+    flex: 1;
+}
+
+.apphead {
+    flex: 0;
     text-align: center;
+    width: 100%;
+    min-height: 68px;
+    align-content: center;
+}
+
+.container {
+    border: 2px solid var(--hero);
+    background-color: var(--superdark);
+    display: block;
+    overflow-y: auto;
+    overflow-x: hidden;
+    width: 100%;
+    padding: 16px;
+}
+
+[data-mid="about"]>.appcontainer {
+    max-height: calc(100vh - 68px - 68px);
+}
+[data-mid="settings"]>.appcontainer {
+    max-height: calc(100vh - 68px - 84px);
+}
+[data-mid="engines"]>.appcontainer {
+    max-height: calc(100vh - 68px - 120px);
+}
+
+.appbtns {
+	flex: 0;
+	padding: 8px;
+	background: var(--alt);
+}
+
+.btnrow {
+    display: flex;
+    button {
+        height: 48px;
+        margin: 2px;
+        flex: 1;
+    }
 }
 
 .navbar {
@@ -164,7 +228,7 @@ form {
 }
 
 button {
-    transition: all 0.1s;
+    transition: all 0.05s;
     background-color: var(--btn);
     color: var(--btncolor);
     border: 2px solid var(--hero);
@@ -179,6 +243,66 @@ button {
     }
 }
 
+.ELcontainer {
+    display: flex;
+    border: 1px solid var(--hero);
+    height: 64px;
+    &:not(:last-child) {
+        margin-bottom: 4px;
+    }
+}
+
+.ELbtns {
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+    button {
+        flex: 1;
+        border-radius: 0;
+        border: 1px solid var(--hero);
+        align-content: center;
+    }
+}
+
+.ELinputs {
+	display: flex;
+	flex-direction: column;
+    border: 1px solid var(--hero);
+	flex: 4;
+    input {
+        font-family: var(--font);
+        flex: 1;
+        border-radius: 0;
+    }
+}
+
+@media (min-width: 1080px) {
+    .ac {
+        max-width: 480px;
+    }
+}
+
+@media (max-width: 500px) {
+    .hc {
+        justify-content: center;
+        min-height: 100vh;
+    }
+    .content {
+        flex-direction: column;
+    }
+    .appcontainer {
+        overflow-y: auto;
+        flex: 1;
+    }
+
+}
+
+.readme {
+    padding: 4px 16px;
+}
+
 iframe {
     flex: 1;
+    width: 100%;
+    height: 100%;
 }

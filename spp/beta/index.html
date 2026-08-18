@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<!-- made by ccn0 | v1.6.18D01 -->
+<!-- made by ccn0 | v1.6.18D02 -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -235,9 +235,9 @@
     </script>
 </head>
 <body>
-    <div class="menu activemenu" data-mid="home">
-        <div class="content">
-            <div class="col hc">
+    <div class="content">
+        <div class="col hc">
+            <div class="hcdiv">
                 <figure>
                     <img src="logo.png" alt="SearchPlusPREMIUM Logo">
                     <figcaption>
@@ -256,38 +256,186 @@
                     <input type="submit" value="TAKE ME" title="Submit query" aria-label="Submit query and go">
                 </form>
                 <div class="topnav">
-                    <a onclick="displayMenu('settings')">settings</a><a onclick="displayMenu('engines')">engines</a><a onclick="displayMenu('about')">about</a>
+                    <button onclick="openApp('settings')">settings</button><button onclick="openApp('engines')">engines</button><button onclick="openApp('about')">about</button><a href="https://bsky.app/profile/ccn0.net">made by ccn0</a>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="menu" data-mid="about">
-        <div class="content">
-            <div class="col ac">
-                <h2>About</h2>
-                <iframe src="https://ccn0.net/info/things/spp" frameborder="0"></iframe>
-                <div class="navbar">
-                    <button onclick="displayMenu('home')">Back</button>
+        <div class="col ac hidden" data-mid="about">
+            <div class="apphead"><h2 id="apph2">About</h2></div>
+            <div class="appcontainer">
+                <div class="container readme">
+                    <p>Instead of relying on your browsers search "keywords" or using "@" to specify,
+you can instead use SearchPlusPREMIUM, which is actually free.
+Despite technological advancements over the past few decades,
+some <span title="Firefox...">modern browsers</span> and most mobile browsers have yet to catch up,
+and its just embarrassing. You can add any search engine and even websites that aren't search engines!
+You can set SearchPlusPREMIUM as your search engine by using the URL (where %s is the query),
+<code>https://ccn0.net/searchpluspremium/search.html?q=%s</code>,
+or if your using Firefox, click on the search bar while on this page and click the little icon with the green plus (+).
+                    </p>
+                    <ul>
+                        <li>Type the name of a search engine into the Quick Add bar and hit enter.</li>
+                        <span style="font-weight: bold;">OR</span>
+                        <li>
+                            Click <span class="fakebutton">Add New</span>
+                        </li>
+                        <li>
+                            Add a URL, with %s in the place of the query, e.g. <code>https://www.google.com/search?q=%s</code>
+                        </li>
+                        <li>
+                            Add a Symbol, which you use to specify engine, e.g. searching <code>@ddg hello world</code> will use DuckDuckGo
+                        </li>
+                        <li>
+                            The default search engine will be the one at the top. Variables can be used any amount of times.
+                        </li>
+                        <a href="#detailsvar" onclick="document.querySelector('#detailsvar').open = true">More Variables</a>
+                    </ul>
+                    <p>THANK YOU TO:
+                        <ul>
+                            <li title="Search">Google for <a href="https://fonts.google.com/specimen/Open+Sans"><em>Open Sans</em></a></li>
+                            <li title="PLUS">Paul D. Hunt for <a href="https://fonts.google.com/specimen/Source+Sans+3"><em title="when did they rename source sans pro???">Source Sans 3</em></a></li>
+                            <li title="premium">Robert Leuschke for <a href="https://fonts.google.com/specimen/Mea+Culpa"><em>Mea Culpa</em></a></li>
+                            <li title="If you host your own, pls call it something else">Source code by <a href="https://github.com/ccn0">CCN0</a>, under GPLv3 (source code).</li>
+                        </ul>
+                    </p>
+                    <p>If you like this search engine, be sure to give it a like. If you find a problem, or want me to add an engine to Quick Add,
+                        <a href="https://github.com/ccn0/ccn0.github.io/issues">open an issue on the website repo</a>.
+                    </p>
+                    <details id="detailsvar">
+                        <summary>Variables</summary>
+                        <ul>
+                            <li>
+                                <code>%s</code>: Your search query with URI encoding
+                            </li>
+                            <li>
+                                <code>%u</code>: Your unencoded search query
+                            </li>
+                            <li>
+                                <code>%p</code>: Your engine's symbol
+                            </li>
+                            <li>
+                                <code>%yr</code>: Last two digits of the current year
+                            </li>
+                            <li>
+                                <code>%year</code>: Full current year
+                            </li>
+                            <li>
+                                <code>%mo</code>: Current month (zero-padded)
+                            </li>
+                            <li>
+                                <code>%dy</code>: Current day of the month (zero-padded)
+                            </li>
+                            <li>
+                                <code>%hr</code>: Current hour (zero-padded, 24-hour format)
+                            </li>
+                            <li>
+                                <code>%min</code>: Current minute (zero-padded)
+                            </li>
+                            <li>
+                                <code>%ms</code>: Current millisecond (zero-padded, three digits)
+                            </li>
+                            <li>
+                                <code>%dow</code>: Day of the week
+                            </li>
+                            <li>
+                                <code>%dwn</code>: Day of the week as number (1 = Monday)
+                            </li>
+                            <li>
+                                <code>%ts</code>: Timestamp
+                            </li>
+                        </ul>
+                    </details>
+                </div>
+                <!-- <iframe src="https://ccn0.net/info/things/spp" frameborder="0"></iframe> -->
+            </div>
+            <div class="appbtns">
+                <div class="btnrow">
+                    <button onclick="openApp('CLOSE')">Close</button>
+                </div>
+            </div>
+        </div>
+        <div class="col ac hidden" data-mid="settings">
+            <div class="apphead"><h2 id="apph2">Settings</h2></div>
+            <div class="appcontainer">
+                <div class="container"></div>
+            </div>
+            <div class="appbtns">
+                <div class="btnrow">
+                    <button onclick="openApp('engines')">Engine List</button>
+                    <button onclick="openModal('resetall')">Reset Settings...</button>
+                </div>
+                <div class="btnrow">
+                    <button onclick="openApp('CLOSE')">Close</button>
+                    <button onclick="openModal('importexport')">Import/Export Data...</button>
+                </div>
+            </div>
+        </div>
+        <div class="col ac hidden" data-mid="engines">
+            <div class="apphead"><h2 id="apph2">Engines</h2></div>
+            <div class="appcontainer">
+                <div class="container" id="enginelist">
+                    <div class="ELcontainer">
+                        <div class="ELbtns">
+                            <button onclick="openModal('moveengine',{engineindex:1})">Move...</button>
+                            <button onclick="openModal('deleteengine',{engineindex:1})">Delete...</button>
+                            <button onclick="openModal('enginesettings',{engineindex:1})">Settings...</button>
+                        </div>
+                        <div class="ELinputs">
+                            <input type="text" placeholder="https://, URL with %s or other %variables">
+                            <input type="text" placeholder="@symbol, prefix for searching">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="appbtns">
+                <div class="btnrow">
+                    <button onclick="openModal('quickadd')">Quick Add...</button>
+                    <button>Add New</button>
+                </div>
+                <div class="btnrow">
+                    <button onclick="openApp('CLOSE')">Close</button>
+                    <button onclick="openModal('importexport')">Import/Export Data...</button>
+                    <button onclick="openModal('findinengines')">Find...</button>
                 </div>
             </div>
         </div>
     </div>
     <script>
-        const params = new URLSearchParams(window.location.search);
-        const query = params.get("q");
-        const menus = ["home","about","settings","engines"]
-        if (query != null) {
-            document.querySelector("#q").value = query;
-        };
-        function displayMenu(menuid) {
-            document.querySelectorAll(".menu").forEach((menu)=>{
-                menu.classList.remove("activemenu");
-            });
-            if (menus.includes(menuid)) {
-                document.querySelector(`.menu[data-mid="${menuid}"]`).classList.add("activemenu")
-            } else {
-                document.querySelector(`.menu[data-mid="home"]`).classList.add("activemenu");
+    const params = new URLSearchParams(window.location.search);
+    const query = params.get("q");
+    if (query != null) {
+        document.querySelector("#q").value = query;
+    };
+    function loadEngineList() {
+
+    }
+    function openApp(appname, params) {
+        document.querySelectorAll("[data-mid]").forEach(m=>{
+            m.classList.add("hidden");
+            m.ariaHidden = true;
+            if (m.dataset.mid == appname) {
+                m.classList.remove("hidden");
+                m.ariaHidden = false;
+                m.scrollIntoView();
+                m.querySelector(".container").focus();
             };
-        };
+        });
+        switch (appname) {
+            case "about":
+
+                break;
+            case "engines":
+                loadEngineList();
+                break;
+            case "CLOSE":
+                document.querySelectorAll("[data-mid]").forEach(m=>{
+                    m.classList.add("hidden");
+                    m.ariaHidden = true;
+                });
+                break;
+            default:
+                break;
+        }
+    };
     </script>
 </body>
