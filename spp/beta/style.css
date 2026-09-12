@@ -30,7 +30,7 @@
     --font: Arial, sans-serif;
 }
 html {
-    scrollbar-color:  var(--alt) var(--dark);
+    scrollbar-color:  var(--alt) var(--dark)!important;
 }
 body {
     margin: 0;
@@ -105,7 +105,12 @@ figure {
 }
 
 input {
+    transition: background-color 0.1s;
     color: var(--inputcolor);
+    background-color: var(--input);
+    &:focus {
+        background-color: var(--inputfocus);
+    }
 }
 
 form {
@@ -197,6 +202,7 @@ form {
 }
 
 .container {
+    scrollbar-color:  var(--alt) var(--dark);
     border: 2px solid var(--hero);
     background-color: var(--superdark);
     display: block;
@@ -253,6 +259,60 @@ button {
     }
     &:active {
         background-color: var(--btnactive);
+    }
+}
+
+.settingsitemcont {
+    display: flex;
+    height: 48px;
+    background-color: var(--muted);
+    border: 2px solid var(--hero);
+    &:not(:last-child) {
+        margin-bottom: 4px;
+    }
+    &:hover {
+        background-color: var(--dark);
+    }
+}
+
+.silabel {
+    flex: 1;
+    align-content: center;
+    text-align: center;
+    label {
+        max-width: 100%;
+        display: block;
+        text-align: center;
+        align-content: center;
+        height: 100%;
+    }
+}
+
+.siinput {
+    padding: 4px;
+    flex: 1;
+    align-content: center;
+    text-align: center;
+    input[type=text] {
+        padding: 8px;
+        width: 100%;
+    }
+    input[type="checkbox"] {
+        width: 32px;
+        height: 32px;
+    }
+    select {
+        border: 2px solid var(--hero);
+        background-color: var(--btn);
+        color: var(--btncolor);
+        padding: 8px;
+        width: 100%;
+        &:hover:not(:open) {
+            background-color: var(--btnhover);
+        }
+        &:active:not(:open) {
+            background-color: var(--btnactive);
+        }
     }
 }
 

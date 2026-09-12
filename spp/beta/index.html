@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<!-- made by ccn0 | v1.6.18D03 -->
+<!-- made by ccn0 | v1.6.18D04 -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -51,7 +51,7 @@
             <div class="appcontainer">
                 <div class="container readme">
                     <h1>WARNING</h1>
-                    <p>This is the BETA version of SearchPlusPREMIUM, which may be unstable! You can provide <a href="https://github.com/ccn0/searchpluspremium/issues">feedback and report bugs on GitHub</a>.</p>
+                    <p>This is the BETA version of SearchPlusPREMIUM, with many half-implemented features, which may be unstable! You can provide <a href="https://github.com/ccn0/searchpluspremium/issues">feedback and report bugs on GitHub</a>.</p>
                     <hr>
                     <p>Instead of relying on your browsers search "keywords" or using "@" to specify,
 you can instead use SearchPlusPREMIUM, which is actually free.
@@ -146,7 +146,19 @@ or if your using Firefox, click on the search bar while on this page and click t
         <div class="col ac hidden" data-mid="settings">
             <div class="apphead"><h2 id="apph2">Settings</h2></div>
             <div class="appcontainer">
-                <div class="container"></div>
+                <div class="container SETTINGSCont">
+                    <div class="settingsitemcont">
+                        <div class="silabel">
+                            <label for="theme">Theme</label>
+                        </div>
+                        <div class="siinput">
+                            <select name="theme" id="theme">
+                                <option value="default">Default Light</option>
+                                <option value="sppdark">Default Dark</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="appbtns">
                 <div class="btnrow">
@@ -191,6 +203,34 @@ or if your using Firefox, click on the search bar while on this page and click t
     </div>
     
     <script>
+    function cE(tagname, attributes) {
+        const el = document.createElement((tagname ?? "div"));
+        Object.entries(attributes ?? {}).forEach(([key, val]) => {
+            switch (key) {
+                case "dataset":
+                    if (typeof val === "object") {
+                        Object.entries(val).forEach(([dKey, dVal]) => {
+                            el.dataset[dKey] = String(dVal);
+                        });
+                    };
+                    break;
+                case "classes":
+                    el.classList.add(...val);
+                    break;
+                case "listeners":
+                    if (typeof val === "object") {
+                        Object.entries(val).forEach(([eType, eFunc]) => {
+                            el.addEventListener(eType, eFunc);
+                        });
+                    };
+                    break;
+                default:
+                    el[key] = val;
+                    break;
+            };
+        });
+        return el;
+    };
     function randomInteger(min, max) {
         const rmin = min;
         const rmax = max;
@@ -385,6 +425,33 @@ or if your using Firefox, click on the search bar while on this page and click t
                 },
             ],
         },
+        DICTIONARY: {
+            "darkTheme": "Dark Theme",
+            "theme": "Theme",
+            "autofocusNew": "Autofocus New Engines",
+            "useEnginesParamAllowed": "Enable use of ?&NoBreak;useEngines",
+            "magicword": "Magic Word",
+            "searchEngines": "Engines"
+        },
+        TYPEDICT: {
+            "autofocusNew": "checkbox",
+            "useEnginesParamAllowed": "checkbox",
+            "magicword": "text",
+        },
+        THEMES:{
+            "default":{
+                name:"Default Light",
+                creator:"CCN0",
+                cssLoadFrom:false,
+                type:"light",
+            },
+            "sppdark":{
+                name:"Default Dark",
+                creator:"CCN0",
+                cssLoadFrom:false,
+                type:"dark",
+            },
+        },
         SETTINGS: JSON.parse(
             localStorage.getItem("spp_settings") || DSETTINGS
         ),
@@ -413,38 +480,40 @@ or if your using Firefox, click on the search bar while on this page and click t
             enginelist.appendChild(createELitem(e, {idx:idx}));
         });
         function createELitem(engine = {}, props = {}) {
-            const ELcont = document.createElement("div");
-            ELcont.classList.add("ELcontainer");
-            const ELbtns = document.createElement("div");
-            ELbtns.classList.add("ELbtns");
-            const ELinputs = document.createElement("div");
-            ELinputs.classList.add("ELinputs");
+            const ELcont = cE("div",{className:"ELcontainer"});
+            const ELbtns = cE("div",{className:"ELbtns"});
+            const ELinputs = cE("div",{className:"ELinputs"});
 
-            const movebtn = document.createElement("button");
-            movebtn.textContent = "Move...";
-            movebtn.title = "Move This Engine";
-            movebtn.addEventListener("click",()=>openModal('moveengine',{idx:i}));
+            const movebtn = cE("button",{
+                textContent:"Move...",
+                title:"Move This Engine",
+                listeners:{"click":()=>openModal('moveengine',{idx:i})}
+            });
             ELbtns.appendChild(movebtn);
-            const deletebtn = document.createElement("button");
-            deletebtn.textContent = "Delete...";
-            deletebtn.title = "Delete This Engine";
-            deletebtn.addEventListener("click",()=>openModal('deleteengine',{idx:i}));
+            const deletebtn = cE("button",{
+                textContent:"Delete......",
+                title:"Delete This Engine",
+                listeners:{"click":()=>openModal('deleteengine',{idx:i})}
+            });
             ELbtns.appendChild(deletebtn);
-            const propbutton = document.createElement("button");
-            propbutton.textContent = "Edit...";
-            propbutton.title = "Edit This Engine";
-            propbutton.addEventListener("click",()=>openModal('enginesettings',{idx:i}));
+            const propbutton = cE("button",{
+                textContent:"Edit......",
+                title:"Edit This Engine",
+                listeners:{"click":()=>openModal('enginesettings',{idx:i})}
+            });
             ELbtns.appendChild(propbutton);
 
-            const urlinput = document.createElement("input");
-            urlinput.value = engine.url;
-            urlinput.type = "text";
-            urlinput.placeholder = "https://, URL with %s or other %variables";
+            const urlinput = cE("input",{
+                value:engine.url,
+                type:"text",
+                placeholder:"https://, URL with %s or other %variables"
+            });
             ELinputs.appendChild(urlinput);
-            const symbinput = document.createElement("input");
-            symbinput.value = engine.symbol;
-            symbinput.type = "text";
-            symbinput.placeholder = "@symbol, prefix for searching";
+            const symbinput = cE("input",{
+                value:engine.symbol,
+                type:"text",
+                placeholder:"@symbol, prefix for searching with"
+            });;
             ELinputs.appendChild(symbinput);
 
             ELcont.appendChild(ELbtns);
@@ -481,6 +550,84 @@ or if your using Firefox, click on the search bar while on this page and click t
                 break;
         }
     };
+    
+    function loadSettingInput(setting, special) {
+        const SICont = cE("div",{className:"settingsitemcont"});
+
+        const labelCont = cE("div",{className:"silabel"});
+        const label = cE("label",{
+            htmlFor:setting,
+            innerHTML:SPP.DICTIONARY[setting]
+        });
+        labelCont.appendChild(label);
+        SICont.appendChild(labelCont);
+
+        if (!special) {
+            const inputCont = cE("div",{className:"siinput"});
+            const input = cE("input",{
+                id:setting,
+                name:setting,
+                type:SPP.TYPEDICT[setting],
+            });
+            if (SPP.TYPEDICT[setting] == "checkbox") {input.checked = SPP.SETTINGS[setting]} else {
+                input.value = SPP.SETTINGS[setting];
+            };
+            input.addEventListener("change",(e)=>{
+                if (SPP.TYPEDICT[setting] == "number") {SPP.SETTINGS[setting] = Number(e.target.value); return};
+                if (SPP.TYPEDICT[setting] == "text") {SPP.SETTINGS[setting] = e.target.value; return};
+                if (SPP.TYPEDICT[setting] == "checkbox") {SPP.SETTINGS[setting] = e.target.checked; return};
+                SPP.save();
+                console.log(SPP.SETTINGS)
+            });
+            inputCont.appendChild(input);
+            SICont.appendChild(inputCont);
+            document.querySelector(".SETTINGSCont").appendChild(SICont);
+            return;
+        };
+        switch (setting) {
+            case "theme":
+                const inputCont = cE("div",{className:"siinput"});
+                const select = cE("select",{
+                    id:setting,
+                    name:setting,
+                });
+                inputCont.appendChild(select);
+
+                Object.entries(SPP.THEMES).forEach(([key,theme])=>{
+                    const opt = cE("option",{
+                        value:key,
+                        textContent:theme.name
+                    });
+                    if (key == SPP.SETTINGS.theme) opt.setAttribute("selected", true);
+                    select.appendChild(opt)
+                });
+                select.addEventListener("input",(e)=>{
+                    document.body.dataset.theme = e.target.value;
+                    SPP.SETTINGS.theme = e.target.value;
+                    SPP.save();
+                });
+
+                SICont.appendChild(inputCont);
+                document.querySelector(".SETTINGSCont").appendChild(SICont);
+                break;
+        
+            default:
+                break;
+        };
+    };
+
+    function initSettings() {
+        const SETTINGSCONT = document.querySelector(".SETTINGSCont");
+        SETTINGSCONT.innerHTML = "";
+
+        loadSettingInput("theme", true);
+        loadSettingInput("autofocusNew");
+        loadSettingInput("useEnginesParamAllowed");
+        loadSettingInput("magicword");
+    };
+
+    initSettings();
+    
     if (location.hostname == "127.0.0.1" || location.pathname.includes("/beta/")) {
         document.querySelector("figure>img").style.cssText = "filter:sepia(1) saturate(100);";
     };
