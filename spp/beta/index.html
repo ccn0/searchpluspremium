@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<!-- made by ccn0 | v1.6.18D04 -->
+<!-- made by ccn0 | v1.6.18D05 -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -147,17 +147,6 @@ or if your using Firefox, click on the search bar while on this page and click t
             <div class="apphead"><h2 id="apph2">Settings</h2></div>
             <div class="appcontainer">
                 <div class="container SETTINGSCont">
-                    <div class="settingsitemcont">
-                        <div class="silabel">
-                            <label for="theme">Theme</label>
-                        </div>
-                        <div class="siinput">
-                            <select name="theme" id="theme">
-                                <option value="default">Default Light</option>
-                                <option value="sppdark">Default Dark</option>
-                            </select>
-                        </div>
-                    </div>
                 </div>
             </div>
             <div class="appbtns">
@@ -175,17 +164,6 @@ or if your using Firefox, click on the search bar while on this page and click t
             <div class="apphead"><h2 id="apph2">Engines</h2></div>
             <div class="appcontainer">
                 <div class="container" id="enginelist">
-                    <div class="ELcontainer">
-                        <div class="ELbtns">
-                            <button onclick="openModal('moveengine',{engineindex:1})">Move...</button>
-                            <button onclick="openModal('deleteengine',{engineindex:1})">Delete...</button>
-                            <button onclick="openModal('enginesettings',{engineindex:1})">Settings...</button>
-                        </div>
-                        <div class="ELinputs">
-                            <input type="text" placeholder="https://, URL with %s or other %variables">
-                            <input type="text" placeholder="@symbol, prefix for searching">
-                        </div>
-                    </div>
                 </div>
             </div>
             <div class="appbtns">
@@ -410,6 +388,24 @@ or if your using Firefox, click on the search bar while on this page and click t
             autofocusNew: true,
             useEnginesParamAllowed: true,
             magicword: seed(16),
+            THEMES:{
+                "default":{
+                    v:"0D00",
+                    name:"Default Light",
+                    key:"default",
+                    creator:"CCN0",
+                    updateurl:false,
+                    type:"light",
+                },
+                "sppdark":{
+                    v:"0D00",
+                    name:"Default Dark",
+                    key:"sppdark",
+                    creator:"CCN0",
+                    updateurl:false,
+                    type:"dark",
+                },
+            },
             searchEngines: [
                 {
                     url: "https://www.google.com/search?q=%s",
@@ -438,20 +434,6 @@ or if your using Firefox, click on the search bar while on this page and click t
             "useEnginesParamAllowed": "checkbox",
             "magicword": "text",
         },
-        THEMES:{
-            "default":{
-                name:"Default Light",
-                creator:"CCN0",
-                cssLoadFrom:false,
-                type:"light",
-            },
-            "sppdark":{
-                name:"Default Dark",
-                creator:"CCN0",
-                cssLoadFrom:false,
-                type:"dark",
-            },
-        },
         SETTINGS: JSON.parse(
             localStorage.getItem("spp_settings") || DSETTINGS
         ),
@@ -459,15 +441,21 @@ or if your using Firefox, click on the search bar while on this page and click t
             localStorage.setItem("spp_settings", JSON.stringify(SPP.SETTINGS));
         },
     };
-    (()=>{
+    function buildSettings() {
         let settings = JSON.parse(localStorage.getItem("spp_settings")) || {};
         for (const key in SPP.DSETTINGS) {
             if (!(key in settings)) {
                 settings[key] = SPP.DSETTINGS[key];
             };
         };
+        for (const key in SPP.DSETTINGS.THEMES) {
+            if (!(key in settings.THEMES)) {
+                settings.THEMES[key] = SPP.DSETTINGS.THEMES[key];
+            };
+        };
         localStorage.setItem("spp_settings", JSON.stringify(settings));
-    })();
+    };
+    buildSettings();
     const params = new URLSearchParams(window.location.search);
     const query = params.get("q");
     if (query != null) {
@@ -491,7 +479,7 @@ or if your using Firefox, click on the search bar while on this page and click t
             });
             ELbtns.appendChild(movebtn);
             const deletebtn = cE("button",{
-                textContent:"Delete......",
+                textContent:"Delete...",
                 title:"Delete This Engine",
                 listeners:{"click":()=>openModal('deleteengine',{idx:i})}
             });
@@ -593,7 +581,7 @@ or if your using Firefox, click on the search bar while on this page and click t
                 });
                 inputCont.appendChild(select);
 
-                Object.entries(SPP.THEMES).forEach(([key,theme])=>{
+                Object.entries(SPP.SETTINGS.THEMES).forEach(([key,theme])=>{
                     const opt = cE("option",{
                         value:key,
                         textContent:theme.name
@@ -616,7 +604,85 @@ or if your using Firefox, click on the search bar while on this page and click t
         };
     };
 
-    function initSettings() {
+    function loadThemes() {
+        Object.entries(SPP.SETTINGS.THEMES).forEach(([id, theme]) =>{
+            if (!theme.csstext) return;
+            document.head.appendChild(cE("style",{dataset:{"themeid":theme.key},textContent:theme.csstext}));
+        });
+        document.body.dataset.theme = SPP.SETTINGS.theme;
+    };
+    function installTheme(themeurl) {
+        if (!confirm(`Are you sure you want to install this theme from ${themeurl}?`)) return;
+        let t = {
+            v:"0D00",
+            name:themeurl,
+            key:themeurl,
+            creator:themeurl,
+            type:"light",
+            updateurl:false,
+            csstext:""
+        };
+        fetch(themeurl)
+            .then(response => response.text())
+            .then(txt => {
+                txt = txt.replaceAll("\r","");
+                let lines = txt.split("\n");
+                if ((lines[1].startsWith("SPPCSSv"))) {
+                    console.log("found magic word");
+                } else {
+                    alert("Failed to install!");
+                    console.error("No magic word detected.");
+                    return;
+                };
+                t["csstext"] = txt;
+                t.key = getKey("key") || themeurl;
+                t.name = getKey("name") || themeurl;
+                t.type = getKey("type") || "light";
+                t.creator = getKey("creator") || themeurl;
+                t.updateurl = getKey("updateurl") || false;
+                if (Object.keys(SPP.SETTINGS.THEMES).includes(t.key)) {
+                    if (SPP.SETTINGS.THEMES[getKey("key")]["csstext"] == txt) {
+                        alert("You already have this installed.");
+                        console.error("alreasy installed")
+                        return;
+                    };
+                };
+                console.log(t);
+                SPP.SETTINGS.THEMES[getKey("key")] = t;
+                SPP.save();
+                alert(`Successfully Installed "${t.name}"`);
+                loadThemes();
+                loadSettingsMenu();
+                function getKey(key) {
+                    let value = "";
+                    let keyval = ":"
+                    lines.forEach(line=>{
+                        if (line.startsWith(`${key}:`)) {
+                            keyval = line;
+                            console.log(line)
+                            return;
+                        }
+                    });
+                    value = keyval.split(":")[1];
+                    return value;
+                };
+            });
+    };
+    function uninstallTheme(themekey) {
+        if (!confirm(`Are you sure you want to delete "${SPP.SETTINGS.THEMES[themekey].name}"?`)) return;
+        if (Object.keys(SPP.DSETTINGS.THEMES).includes(themekey)) {
+            console.error("cant delete system theme")
+            return;
+        };
+        delete SPP.SETTINGS.THEMES[themekey];
+        SPP.save();
+        loadThemes();
+        loadSettingsMenu();
+        document.querySelector(`[data-themeid="${themekey}"]`).remove();
+        alert("Uninstalled successfully");
+    };
+
+    function loadSettingsMenu() {
         const SETTINGSCONT = document.querySelector(".SETTINGSCont");
         SETTINGSCONT.innerHTML = "";
 
@@ -625,12 +691,17 @@ or if your using Firefox, click on the search bar while on this page and click t
         loadSettingInput("useEnginesParamAllowed");
         loadSettingInput("magicword");
     };
+    loadSettingsMenu();
 
-    initSettings();
+    document.addEventListener("DOMContentLoaded",()=>{
+        if(window.getComputedStyle(document.querySelector("figcaption")).getPropertyValue("font-family") != "Arial, sans-serif") {
+            document.head.appendChild(cE("link",{rel:"stylesheet","href":"style.css"}));
+        };
+    });
     
     if (location.hostname == "127.0.0.1" || location.pathname.includes("/beta/")) {
-        document.querySelector("figure>img").style.cssText = "filter:sepia(1) saturate(100);";
+        document.querySelector("figure>img").classList.add("dev");
     };
-    document.body.dataset.theme = SPP.SETTINGS.theme;
+    loadThemes();
     </script>
 </body>

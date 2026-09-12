@@ -1,0 +1,22 @@
+/*
+SPPCSSv0D00
+name:Pink
+key:pink
+creator:CCN0
+type:dark
+updateurl:/test.spp.css
+###
+Pink Theme test for SearchPlusPremium 2.0 BETA
+*/[data-theme="pink"] {
+    --hero: #fd66b4;
+    --dark: #231119;
+    --muted: #590032;
+    --superdark: #1c010b;
+    --alt: #822c5c;
+    --btn: #ff008f;
+    --btncolor: #fff;
+    --btnhover: #ff54ac;
+    --btnactive: #2e101b;
+    --input: #ffcee7;
+    --scrollbar: #ff198e #520228;
+}

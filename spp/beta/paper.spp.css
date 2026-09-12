@@ -1,0 +1,30 @@
+/*
+SPPCSSv0D00
+name:Paper
+key:paper
+creator:CCN0
+type:light
+updateurl:/paper.spp.css
+###
+Paper Theme test for SearchPlusPremium 2.0 BETA r2
+*/[data-theme="paper"] {
+    --hero: #000;
+    --dark: #cbcbcb;
+    --muted: #fff;
+    --superdark: #cfcfcf;
+    --alt: #e5e5e5;
+    --btn: #b6b6b6;
+    --btnhover: #c5c5c5;
+    --btnactive: #454545;
+    --inputborder: 1px #555 solid;
+    --searchbtnhover: #757575;
+    --searchbtnactive: #000;
+    --magenta: #d800bb;
+    --yellow: #955b1e;
+    --cyan: #005868;
+    --brdrrds: 0;
+    --textcolor: #000;
+    --logofilter: invert(1);
+    --devfilter: invert(1);
+    --scrollbar: var(--hero) var(--alt);
+}
